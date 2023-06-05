@@ -19,6 +19,24 @@
 - установите **Suricata**,
 - установите **Fail2Ban**.
 
+```bash
+sudo apt update && sudo apt upgrade
+
+sudo apt install -y build-essential libpcap-dev   \
+libyaml-0-2 libyaml-dev pkg-config zlib1g zlib1g-dev \
+make libmagic-dev libjansson4 libjansson-dev libpcre2-dev
+
+sudo apt install suricata 
+#systemctl status suricata
+suricata -V
+
+sudo suricata-update
+
+sudo apt install -y fail2ban
+systemctl status fail2ban
+fail2ban --version
+```
+
 2. Подготовка системы злоумышленника: установите **nmap** и **thc-hydra** либо скачайте и установите **Kali linux**.
 
 Обе системы должны находится в одной подсети.
