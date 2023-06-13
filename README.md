@@ -21,16 +21,18 @@
 
 ```bash
 sudo apt update && sudo apt upgrade
-
-sudo apt install -y build-essential libpcap-dev   \
-libyaml-0-2 libyaml-dev pkg-config zlib1g zlib1g-dev \
-make libmagic-dev libjansson4 libjansson-dev libpcre2-dev
-
-sudo apt install suricata 
-#systemctl status suricata
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:oisf/suricata-stable
+sudo apt update
+sudo apt install -y suricata
+sudo suricata-update
+systemctl status suricata.service
 suricata -V
 
-sudo suricata-update
+sudo nano /etc/suricata/suricata.yaml # EXTERNAL_NET: "any"
+sudo systemctl restart suricata.service
+systemctl status suricata.service
+
 
 sudo apt install -y fail2ban
 systemctl status fail2ban
@@ -59,6 +61,22 @@ fail2ban --version
 
 
 *В качестве ответа пришлите события, которые попали в логи Suricata и Fail2Ban, прокомментируйте результат.*
+
+```script
+sudo suricata -c /etc/suricata/suricata.yaml -i enp0s3
+sudo tail -f /var/log/suricata/fast.log
+```
+Сканирование nmap -sA в логи suricata не попало
+
+**Сканирование nmap -sT**
+![Сканирование nmap -sT](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sT.png "Сканирование nmap -sT")
+
+**Сканирование nmap -sS**
+![Сканирование nmap -sS](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sS.png "Сканирование nmap -sS")
+
+**Сканирование nmap -sV**
+![Сканирование nmap -sV](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sV.png "Сканирование nmap -sV")
+
 
 ------
 
