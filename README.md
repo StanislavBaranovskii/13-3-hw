@@ -27,6 +27,8 @@ sudo add-apt-repository ppa:oisf/suricata-stable
 sudo apt update
 sudo apt install -y suricata
 sudo suricata-update
+sudo suricata-update list-sources
+#sudo suricata-update update-sources
 systemctl status suricata.service
 suricata -V
 
@@ -67,13 +69,18 @@ systemctl status fail2ban.service
 
 *В качестве ответа пришлите события, которые попали в логи Suricata и Fail2Ban, прокомментируйте результат.*
 
+
+
 ```bash
 #ubuntu
 sudo suricata -c /etc/suricata/suricata.yaml -i enp0s3
-sudo tail -f /var/log/suricata/fast.log
+tail -f /var/log/suricata/fast.log
+grep "192.168.56.103" /var/log/suricata/fast.log
 
-sudo tail /var/log/auth.log
-sudo tail /var/log/fail2ban.log
+
+tail /var/log/auth.log
+grep "192.168.56.103" /var/log/auth.log
+cat /var/log/fail2ban.log
 
 #kali
 sudo nmap -sA 192.168.56.104
@@ -122,6 +129,9 @@ hydra -L users.txt -P pass.txt 192.168.56.104 ssh
 Дополнительная информация по **Fail2Ban**:https://putty.org.ru/articles/fail2ban-ssh.html.
 
 *В качестве ответа пришлите события, которые попали в логи Suricata и Fail2Ban, прокомментируйте результат.*
+
+
+После включения защиты ssh для Fail2Ban падает скорость перебора паролей. По умолчанию после 5 не верных паролей IP адрес хоста блокируется на 10 минут.
 
 **Подбор пароля по ssh (fail2ban - до включения защиты ssh)**
 ![Подбор пароля по ssh (fail2ban)](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-hydra-fail2ban-off.png "Подбор пароля по ssh (fail2ban - до включения защиты ssh)")
