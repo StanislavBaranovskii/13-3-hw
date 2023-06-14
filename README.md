@@ -20,6 +20,7 @@
 - установите **Fail2Ban**.
 
 ```bash
+#ubuntu
 sudo apt update && sudo apt upgrade
 sudo apt install software-properties-common
 sudo add-apt-repository ppa:oisf/suricata-stable
@@ -33,10 +34,14 @@ sudo nano /etc/suricata/suricata.yaml # EXTERNAL_NET: "any"
 sudo systemctl restart suricata.service
 systemctl status suricata.service
 
-
 sudo apt install -y fail2ban
 systemctl status fail2ban
-fail2ban --version
+sudo systemctl start fail2ban
+fail2ban-client -V
+
+sudo nano /etc/fail2ban/jail.conf # [sshd] enabled = true
+sudo systemctl restart fail2ban.service
+systemctl status fail2ban.service
 ```
 
 2. Подготовка системы злоумышленника: установите **nmap** и **thc-hydra** либо скачайте и установите **Kali linux**.
@@ -62,21 +67,36 @@ fail2ban --version
 
 *В качестве ответа пришлите события, которые попали в логи Suricata и Fail2Ban, прокомментируйте результат.*
 
-```script
+```bash
+#ubuntu
 sudo suricata -c /etc/suricata/suricata.yaml -i enp0s3
 sudo tail -f /var/log/suricata/fast.log
+
+sudo tail /var/log/auth.log
+sudo tail /var/log/fail2ban.log
+
+#kali
+sudo nmap -sA 192.168.56.104
+sudo nmap -sS 192.168.56.104
+sudo nmap -sT 192.168.56.104
+sudo nmap -sV 192.168.56.104
+
+hydra -L users.txt -P pass.txt 192.168.56.104 ssh
 ```
 Сканирование nmap -sA в логи suricata не попало
+В логах fail2ban зафиксировано только сканирование nmap -sV
 
-**Сканирование nmap -sT**
-![Сканирование nmap -sT](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sT.png "Сканирование nmap -sT")
-
-**Сканирование nmap -sS**
+**Сканирование nmap -sS (suricata)**
 ![Сканирование nmap -sS](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sS.png "Сканирование nmap -sS")
 
-**Сканирование nmap -sV**
+**Сканирование nmap -sT (suricata)**
+![Сканирование nmap -sT](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sT.png "Сканирование nmap -sT")
+
+**Сканирование nmap -sV (suricata)**
 ![Сканирование nmap -sV](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sV.png "Сканирование nmap -sV")
 
+**Сканирование nmap -sV (fail2ban)**
+![Сканирование nmap -sV (fail2ban)](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-nmap-sV-fail2ban-log.png "Сканирование nmap -sV (fail2ban)")
 
 ------
 
@@ -102,5 +122,14 @@ sudo tail -f /var/log/suricata/fast.log
 Дополнительная информация по **Fail2Ban**:https://putty.org.ru/articles/fail2ban-ssh.html.
 
 *В качестве ответа пришлите события, которые попали в логи Suricata и Fail2Ban, прокомментируйте результат.*
+
+**Подбор пароля по ssh (fail2ban - до включения защиты ssh)**
+![Подбор пароля по ssh (fail2ban)](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-hydra-fail2ban-off.png "Подбор пароля по ssh (fail2ban - до включения защиты ssh)")
+
+**Подбор пароля по ssh (fail2ban - после включения защиты ssh)**
+![Подбор пароля по ssh (fail2ban)](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-hydra-fail2ban-on.png "Подбор пароля по ssh (fail2ban - полсе включения защиты ssh)")
+
+**Подбор пароля по ssh (suricata)**
+![Подбор пароля по ssh (suricata)](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-hydra-suricata.png "Подбор пароля по ssh (suricata)")
 
 ------
