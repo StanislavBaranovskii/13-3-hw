@@ -142,4 +142,28 @@ hydra -L users.txt -P pass.txt 192.168.56.104 ssh
 **Подбор пароля по ssh (suricata)**
 ![Подбор пароля по ssh (suricata)](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-hydra-suricata.png "Подбор пароля по ssh (suricata)")
 
+---
+# Исправления :
+
+- В логе /var/log/auth.log видим историю подключений, в том числе неудачные (подбор паролей) - см. скриншот лога ниже;
+- В логе /var/log/fail2ban.log можем увидить факт блокировки IP (Ban или already banned) - см. скриншот лога ниже;
+- Hydra с настройками по умолчанию и с users.txt из 6-и пользователей и с pass.txt из 6-и паролей
+**до включения fail2ban** завершила работу за 10 секунд без ошибок - см. скриншот работы hydra ниже;
+**после включения fail2ban** завершила работу через 43 секунды и с ошибками по причине refused connection - блокировка выполнена 
+
+**Скриншот лога auth.log**
+![Скриншот лога auth.log](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-auth.log.png "Скриншот лога auth.log")
+
+**Скриншот лога fail2ban.log**
+![Скриншот лога fail2ban.log](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-fail2ban.log.png "Скриншот лога fail2ban.log")
+
+**Скриншот работы hydra**
+![Скриншот работы hydra](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-2-Hydra.png "Скриншот работы hydra")
+
+```bash
+sudo fail2ban-client status # смотрим список контейнеров (jails)
+sudo fail2ban-client status sshd # смотрим список заблокированных IP адресов по ssh
+sudo fail2ban-client set sshd unbanip 192.168.56.103 # исключаем заблокированный IP
+```
+
 ------
