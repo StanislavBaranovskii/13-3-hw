@@ -90,8 +90,8 @@ sudo nmap -sV 192.168.56.104
 
 hydra -L users.txt -P pass.txt 192.168.56.104 ssh
 ```
-Сканирование nmap -sA в логи suricata не попало
-В логах fail2ban зафиксировано только сканирование nmap -sV
+Сканирование nmap -sA (ACK) в логи suricata не попало
+В логах fail2ban зафиксировано только сканирование nmap -sV (Version detection)
 
 **Сканирование nmap -sS (suricata)**
 ![Сканирование nmap -sS](https://github.com/StanislavBaranovskii/13-3-hw/blob/main/img/13-3-1-nmap-sS.png "Сканирование nmap -sS")
